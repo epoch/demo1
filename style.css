@@ -1,0 +1,64 @@
+@import url(http://fonts.googleapis.com/css?family=Londrina+Shadow);
+@import url(http://fonts.googleapis.com/css?family=Mystery+Quest);
+
+#container {
+  margin: 0 auto;
+  width: 360px;
+}
+
+#header {
+  margin-bottom: 10px;
+}
+
+#title {
+  font-family: 'Londrina Shadow', cursive;
+  font-size: 3em;
+}
+
+#timer {
+  font-family: 'Mystery Quest', cursive;
+  font-size: 20px;
+}
+
+#controls {
+  margin-bottom: 10px;
+}
+
+#content {
+  clear: both;
+  border-top: 1px solid black;
+  margin-top: 2em;
+  padding-top: 2em;
+}
+
+.row {
+  clear: both;
+}
+
+.column {
+  border: 1px solid #595139;
+  float: left;
+  font-family: 'Londrina Shadow', cursive;
+  font-size: 50px;
+  height: 65px;
+  margin: 5px;
+  text-align: center;
+  vertical-align: middle;
+  width: 50px;
+  cursor: pointer;
+}
+
+#show {
+  border: 1px solid black;
+  width: 200px;
+  height: 240px;
+  font-family: 'Londrina Shadow', cursive;
+  font-size: 9em;
+  margin: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#show a {
+  text-decoration: none;
+}

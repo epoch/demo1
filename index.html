@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>backbone demo1</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="container">
+
+    <div id="header">
+      <div id="title">Demo</div>
+    </div>
+
+    <div id="controls">
+      <button id="new-card">new card</button>
+    </div>
+
+    <div id="card-list">
+    </div>
+
+    <div id="content">
+    </div>
+
+  </div><!-- content -->
+
+  <script id="new-card-template" type="text/template">
+  <input id="letter"></input><button id="add-card">Add</button>
+  </script>
+
+  <script type="text/javascript" src="jquery-1.11.0.js"></script> 
+  <script type="text/javascript" src="underscore.js"></script> 
+  <script type="text/javascript" src="backbone.js"></script> 
+  <script>
+
+
+    $('#new-card').on('click', function() {
+      var html = '<input id="letter"></input><button id="add-card">Add</button>';
+      $('#content').html(html);
+
+      $('#add-card').on('click', function() {
+        var letter = $('#letter').val();
+        var cardHtml = $('<div>').addClass('column').html(letter);
+        $('#card-list').append(cardHtml);
+        $('#letter').val('');
+      });    
+    });
+
+    $('#card-list').on('click', '.column', function() {
+      var letter = $(this).html();
+      var html = '<div id="show"><a href="">' + letter + '</a></div>';
+      $('#content').html(html);
+
+      $('a').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        $this.fadeOut(200, function() {
+          $this.fadeIn(200);
+        });          
+      })
+    })
+
+  </script> 
+</body>
+</html>
