@@ -26,7 +26,7 @@
   </div><!-- content -->
 
   <script id="new-card-template" type="text/template">
-  <input id="letter"></input><button id="add-card">Add</button>
+  <input id="letter"><button id="add-card">Add</button>
   </script>
 
   <script type="text/javascript" src="jquery-1.11.0.js"></script> 
@@ -35,31 +35,121 @@
   <script>
 
 
-    $('#new-card').on('click', function() {
-      var html = '<input id="letter"></input><button id="add-card">Add</button>';
-      $('#content').html(html);
+    var App = {
+      init: function(letters) {
+        this.letters = letters;
 
-      $('#add-card').on('click', function() {
-        var letter = $('#letter').val();
-        var cardHtml = $('<div>').addClass('column').html(letter);
-        $('#card-list').append(cardHtml);
-        $('#letter').val('');
-      });    
-    });
+        //App.CardList.init();
+        //App.CardList.render(this.letters);
 
-    $('#card-list').on('click', '.column', function() {
-      var letter = $(this).html();
-      var html = '<div id="show"><a href="">' + letter + '</a></div>';
-      $('#content').html(html);
+        //App.NewCardForm.init();
+        //App.Card.init();
 
-      $('a').on('click', function(e) {
-        e.preventDefault();
-        var $this = $(this);
-        $this.fadeOut(200, function() {
-          $this.fadeIn(200);
-        });          
-      })
+        $('#new-card').on('click', function() {
+          var newCardFormView = new NewCardFormView();
+          var html = newCardFormView.render().el;
+          $('#content').html(html)
+        })
+
+        this.renderCardList(this.letters);
+      },
+
+      renderCardList: function(letters) {
+        $('#card-list').empty();
+        $.each(letters, function(index, value) {
+          var model = { letter: value }
+          var view = new CardListItemView({model: model});
+          var html = view.render().el;
+          $('#card-list').append(html);
+        })
+         
+      }
+    }
+
+    var NewCardFormView = Backbone.View.extend({
+      template: _.template($('#new-card-template').html()),
+
+      events: {
+        'click #add-card': 'addCard'
+      },
+
+      render: function() {
+        var html = this.template();
+        this.$el.html(html);
+        return this;
+      },
+
+      addCard: function() {
+        var letter = this.$el.find('#letter').val();
+        App.letters.push(letter);
+        App.renderCardList(App.letters);
+      }
     })
+
+    // App.NewCardForm = {
+    //   init: function() {
+    //     _.bindAll(this, 'render', 'addCard');
+
+    //     this.$content = $('#content');
+    //     $('button#new-card').on('click', this.render);
+    //     this.$content.on('click', 'button#add-card', this.addCard);
+    //   },
+
+    //   render: function() {
+    //     var html = '<input id="letter"><button id="add-card">Add</button>'
+    //     this.$content.html(html);
+    //   },
+
+    //   addCard: function() {
+    //     var letter = this.$content.find('#letter').val();
+    //     App.letters.push(letter);
+    //     App.CardList.render(App.letters);
+    //     this.$content.find('#letter').val('');
+    //   }
+    // }
+
+    var CardListItemView = Backbone.View.extend({      
+      className: 'column',
+      template: _.template('<%= letter %>'),
+      events: {
+        'click': 'showCard' 
+      },
+
+      render: function() {
+        this.$el.html(this.template(this.model));
+        return this;
+      },
+
+      showCard: function() {
+        var letter = this.$el.html();
+        var view = new CardView({el: $('#content') });
+        view.render(letter);
+      }
+    })
+
+    var CardView = Backbone.View.extend({
+      template: _.template('<div id="show"><a href=""><%= letter %></a></div>'),
+
+      events: {
+        'click a': 'blink'
+      },
+
+      render: function(letter) {
+        var html = this.template({letter: letter});
+        this.$el.html(html);
+        return this;
+      },
+
+      blink: function(e) {
+        e.preventDefault();
+        var $a = this.$el.find('a');
+        $a.fadeOut(200, function() {
+          $a.fadeIn(200);
+        }); 
+      }      
+    })
+
+    App.init(['a','b','c']);
 
   </script> 
 </body>
