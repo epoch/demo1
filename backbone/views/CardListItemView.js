@@ -11,8 +11,7 @@
       },
 
       showCard: function() {
-        var card = new App.Card({letter: this.$el.html() });
-        var view = new App.CardView({model: card, el: $('#content') });
+        var view = new App.CardView({model: this.model, el: $('#content') });
         view.render();
       }
     })
