@@ -32,125 +32,45 @@
   <script type="text/javascript" src="jquery-1.11.0.js"></script> 
   <script type="text/javascript" src="underscore.js"></script> 
   <script type="text/javascript" src="backbone.js"></script> 
-  <script>
-
-
+  <script>  
     var App = {
-      init: function(letters) {
-        this.letters = letters;
-
-        //App.CardList.init();
-        //App.CardList.render(this.letters);
-
-        //App.NewCardForm.init();
-        //App.Card.init();
+      init: function(cards) {
+        this.cards = cards;
 
         $('#new-card').on('click', function() {
-          var newCardFormView = new NewCardFormView();
+          var newCardFormView = new App.NewCardFormView();
           var html = newCardFormView.render().el;
           $('#content').html(html)
         })
-
-        this.renderCardList(this.letters);
+        this.renderCardList(this.cards);
       },
 
-      renderCardList: function(letters) {
+      renderCardList: function(cards) {
         $('#card-list').empty();
-        $.each(letters, function(index, value) {
-          var model = { letter: value }
-          var view = new CardListItemView({model: model});
+        $.each(cards, function(index, card) {
+          var view = new App.CardListItemView({model: card});
           var html = view.render().el;
           $('#card-list').append(html);
-        })
-         
+        });     
       }
     }
 
-    var NewCardFormView = Backbone.View.extend({
-      template: _.template($('#new-card-template').html()),
+    $(document).ready(function() {
+  
+      var testCards = [
+        new App.Card({ letter: 'A'}),
+        new App.Card({ letter: 'B'}),
+        new App.Card({ letter: 'C'})
+      ];
 
-      events: {
-        'click #add-card': 'addCard'
-      },
-
-      render: function() {
-        var html = this.template();
-        this.$el.html(html);
-        return this;
-      },
-
-      addCard: function() {
-        var letter = this.$el.find('#letter').val();
-        App.letters.push(letter);
-        App.renderCardList(App.letters);
-      }
+      App.init(testCards);  
     })
-
-    // App.NewCardForm = {
-    //   init: function() {
-    //     _.bindAll(this, 'render', 'addCard');
-
-    //     this.$content = $('#content');
-    //     $('button#new-card').on('click', this.render);
-    //     this.$content.on('click', 'button#add-card', this.addCard);
-    //   },
-
-    //   render: function() {
-    //     var html = '<input id="letter"><button id="add-card">Add</button>'
-    //     this.$content.html(html);
-    //   },
-
-    //   addCard: function() {
-    //     var letter = this.$content.find('#letter').val();
-    //     App.letters.push(letter);
-    //     App.CardList.render(App.letters);
-    //     this.$content.find('#letter').val('');
-    //   }
-    // }
-
-    var CardListItemView = Backbone.View.extend({      
-      className: 'column',
-      template: _.template('<%= letter %>'),
-      events: {
-        'click': 'showCard' 
-      },
-
-      render: function() {
-        this.$el.html(this.template(this.model));
-        return this;
-      },
-
-      showCard: function() {
-        var letter = this.$el.html();
-        var view = new CardView({el: $('#content') });
-        view.render(letter);
-      }
-    })
-
-    var CardView = Backbone.View.extend({
-      template: _.template('<div id="show"><a href=""><%= letter %></a></div>'),
-
-      events: {
-        'click a': 'blink'
-      },
-
-      render: function(letter) {
-        var html = this.template({letter: letter});
-        this.$el.html(html);
-        return this;
-      },
-
-      blink: function(e) {
-        e.preventDefault();
-        var $a = this.$el.find('a');
-        $a.fadeOut(200, function() {
-          $a.fadeIn(200);
-        }); 
-      }      
-    })
-
-    App.init(['a','b','c']);
-
-  </script> 
+    
+  </script>
+  <script type="text/javascript" src="backbone/models/card.js"></script> 
+  <script type="text/javascript" src="backbone/collections/cards.js"></script>   
+  <script type="text/javascript" src="backbone/views/NewCardFormView.js"></script> 
+  <script type="text/javascript" src="backbone/views/CardListItemView.js"></script> 
+  <script type="text/javascript" src="backbone/views/CardView.js"></script>  
 </body>
 </html>
